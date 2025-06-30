@@ -16,7 +16,7 @@ export default function NavBar() {
                     <Button color="inherit" component={Link} href="/projects">
                         Projects
                     </Button>
-                    <Button color="inherit" component={Link} href="/stack">
+                    <Button color="inherit" component={Link} href="/stacks">
                         Tech Stacks
                     </Button>
                 </Stack>
