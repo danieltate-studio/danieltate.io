@@ -1,0 +1,11 @@
+services:
+  personal-website:
+    image: danieltate888/personal-website:latest
+    ports:
+      - "55001:55001"
+    restart: always
+
+# If need to build the image when run the container, uncomment the following lines:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
