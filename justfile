@@ -14,15 +14,15 @@ push:
 
 # Start containers (without build)
 up:
-  docker compose up -d
+  docker compose up -d personal-website
 
 # Start containers (with build)
 up-build:
-  docker compose up -d --build
+  docker compose up -d personal-website --build
 
 # Stop containers
 down:
-  docker compose down
+  docker compose stop personal-website
 
 # View logs
 logs:
@@ -31,5 +31,6 @@ logs:
 # Build → Start → Push
 deploy:
   docker build -t danieltate888/personal-website:latest . && \
-  docker compose up -d && \
+  docker compose stop personal-website && \
+  docker compose up -d personal-website && \
   docker push danieltate888/personal-website:latest
