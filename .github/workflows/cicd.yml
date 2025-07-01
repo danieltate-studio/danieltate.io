@@ -49,9 +49,6 @@ jobs:
           mkdir -p /opt/node-modules-cache
           cp -r ./node_modules /opt/node-modules-cache || true
 
-      - name: Build app
-        run: yarn build
-
       - name: Disable Docker keychain and inject login credentials
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
