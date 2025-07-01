@@ -37,7 +37,7 @@
 // }
 
 pipeline {
-  agent { label 'master' }  // Jenkins Controller 本机执行
+  agent any
 
   stages {
     stage('Checkout') {
