@@ -5,6 +5,14 @@ services:
       - "55001:55001"
     restart: always
 
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 30 --cleanup
+    restart: always
+
 # If need to build the image when run the container, uncomment the following lines:
 #    build:
 #      context: .
