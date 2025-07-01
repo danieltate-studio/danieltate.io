@@ -32,10 +32,7 @@ down:
 logs:
   docker compose logs -f
 
-# Build → Start → Push
 deploy:
-  security unlock-keychain ~/Library/Keychains/login.keychain-db && \
-  docker build -t danieltate888/personal-website:latest . && \
-  docker compose stop personal-website && \
-  docker compose up -d personal-website && \
-  docker push danieltate888/personal-website:latest
+  docker compose --env-file .env up -d --force-recreate
+  
+  
