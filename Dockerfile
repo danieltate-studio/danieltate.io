@@ -9,7 +9,7 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 
 # Install dependencies (includes both dev and prod)
-RUN yarn install
+RUN yarn install --frozen-lockfile --prefer-offline
 
 # Copy the rest of the source code
 COPY . .

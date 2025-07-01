@@ -19,8 +19,11 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Set yarn registry
-        run: yarn config set registry https://registry.npmmirror.com
+      - name: Clean node_modules if integrity fails
+        run: |
+          if [ -f ./yarn.lock ] && [ -d ./node_modules ]; then
+            yarn check --integrity || rm -rf ./node_modules
+          fi
 
       - name: Restore local Yarn cache
         run: |
@@ -32,7 +35,7 @@ jobs:
           [ -d /opt/node-modules-cache ] && cp -r /opt/node-modules-cache ./node_modules || true
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile --prefer-offline
 
       - name: Save local Yarn cache
         if: always()
