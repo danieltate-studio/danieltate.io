@@ -1,6 +1,6 @@
 services:
   personal-website:
-    image: ${DOCKERHUB_USERNAME}/personal-website:latest
+    image: personal-website:latest
     container_name: personal-website
     ports:
       - "55001:55001"
