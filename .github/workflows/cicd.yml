@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: self-hosted # 或 [self-hosted, mac-studio] 如果你设置了 label
+    runs-on: self-hosted
 
     steps:
       - name: Checkout code
@@ -37,17 +37,20 @@ jobs:
 
       - name: Build app
         run: yarn build
-        
+
       - name: Disable Docker keychain and inject login credentials
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
         run: |
-            mkdir -p ~/.docker
-            echo '{"auths":{"https://index.docker.io/v1/":{"auth":"'"$(echo -n "$DOCKER_USERNAME:$DOCKER_TOKEN" | base64)"'"}},"credsStore":""}' > ~/.docker/config.json
+          mkdir -p ~/.docker
+          echo '{"auths":{"https://index.docker.io/v1/":{"auth":"'"$(echo -n "$DOCKER_USERNAME:$DOCKER_TOKEN" | base64)"'"}},"credsStore":""}' > ~/.docker/config.json
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          install: true
+          driver-opts: image=moby/buildkit:buildx-stable-1
 
       - name: Build and push Docker image (with local cache)
         uses: docker/build-push-action@v5
@@ -55,8 +58,6 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          #          platforms: linux/arm64
           tags: ${{ secrets.DOCKER_USERNAME }}/personal-website:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
-          
