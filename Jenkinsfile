@@ -37,25 +37,22 @@
 // }
 
 pipeline {
-  agent none
+  agent { label 'master' }  // Jenkins Controller 本机执行
 
   stages {
     stage('Checkout') {
-      agent any
       steps {
         checkout scm
       }
     }
 
     stage('Build Image') {
-      agent any
       steps {
         sh 'docker build -t danieltate888/personal-website:latest .'
       }
     }
 
     stage('Push Image') {
-      agent any
       steps {
         withCredentials([string(credentialsId: 'dockerhub-token', variable: 'DOCKER_TOKEN')]) {
           sh 'echo "$DOCKER_TOKEN" | docker login -u danieltate888 --password-stdin'
@@ -65,7 +62,6 @@ pipeline {
     }
 
     stage('Deploy') {
-      agent any
       steps {
         sh 'just deploy'
       }
