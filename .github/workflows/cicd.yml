@@ -37,18 +37,20 @@ jobs:
 
       - name: Build app
         run: yarn build
+        
+      - name: Patch Docker config to disable keychain
+        run: |
+          mkdir -p ~/.docker
+          echo '{"auths":{},"credsStore":""}' > ~/.docker/config.json  
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Unlock keychain and login to Docker Hub
+      - name: Login to Docker Hub
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-        run: |
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" ~/Library/Keychains/login.keychain-db
-          echo -n "$DOCKER_TOKEN" | docker login --username "$DOCKER_USERNAME" --password-stdin
+        run: echo -n "$DOCKER_TOKEN" | docker login --username "$DOCKER_USERNAME" --password-stdin
 
       - name: Build and push Docker image (with local cache)
         uses: docker/build-push-action@v5
