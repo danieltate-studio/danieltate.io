@@ -1,8 +1,11 @@
-# Log in to Docker Hub
-login:
-  mkdir -p ~/.docker
-  echo '{ "auths": {}, "credsStore": "" }' > ~/.docker/config.json
-  docker login -u danieltate888
+set shell := ["bash", "-c"]
+
+login token="":
+  echo -n "{{token}}" | docker login --username danieltate888 --password-stdin
+
+# Logout
+logout:
+  docker logout
 
 # Build Docker image
 build:
@@ -10,6 +13,7 @@ build:
 
 # Push image to Docker Hub
 push:
+  security unlock-keychain ~/Library/Keychains/login.keychain-db && \
   docker push danieltate888/personal-website:latest
 
 # Start containers (without build)
@@ -30,6 +34,7 @@ logs:
 
 # Build → Start → Push
 deploy:
+  security unlock-keychain ~/Library/Keychains/login.keychain-db && \
   docker build -t danieltate888/personal-website:latest . && \
   docker compose stop personal-website && \
   docker compose up -d personal-website && \
