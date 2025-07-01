@@ -2,9 +2,9 @@ name: CI/CD
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   build-and-deploy:
@@ -63,21 +63,21 @@ jobs:
           install: true
           driver-opts: image=moby/buildkit:buildx-stable-1
 
-      - name: Build and load Docker image locally
+      - name: Build and push Docker image (with local cache)
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
-          push: false
-          load: true
+          push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/personal-website:latest
           cache-from: type=local,src=/opt/docker-cache
           cache-to: type=local,dest=/opt/docker-cache,mode=max
           provenance: false
 
-      - name: Push image to Docker Hub using same tag
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/personal-website:latest
-          
-      - name: Print image ID
+      - name: Done
         run: |
-          docker images personal-website:latest --format "Built image: {{.ID}}"    
+          echo "======================================"
+          echo "✅ CI/CD pipeline completed successfully!"
+          echo "📦 Image pushed: ${{ secrets.DOCKER_USERNAME }}/personal-website:latest"
+          echo "🕵️‍♂️ Watchtower should have already triggered container reload"
+          echo "======================================"    
