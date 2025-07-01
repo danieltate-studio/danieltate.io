@@ -19,6 +19,23 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Set yarn registry
+        run: yarn config set registry https://registry.npmmirror.com
+
+      - name: Limit network concurrency
+        run: yarn config set networkConcurrency 4
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.yarn/cache
+            .yarn/cache
+            node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       - name: Install dependencies
         run: yarn install
 
@@ -48,5 +65,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          platforms: linux/amd64,linux/arm64
           tags: ${{ secrets.DOCKER_USERNAME }}/personal-website:latest
