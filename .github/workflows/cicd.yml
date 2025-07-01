@@ -22,18 +22,29 @@ jobs:
       - name: Set yarn registry
         run: yarn config set registry https://registry.npmmirror.com
 
-      - name: Cache Yarn & node_modules
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/yarn
-            node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+      - name: Restore local Yarn cache
+        run: |
+          mkdir -p ~/.cache/yarn
+          [ -d /opt/yarn-cache ] && cp -r /opt/yarn-cache/* ~/.cache/yarn/ || true
+
+      - name: Restore local node_modules cache
+        run: |
+          [ -d /opt/node-modules-cache ] && cp -r /opt/node-modules-cache ./node_modules || true
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+
+      - name: Save local Yarn cache
+        if: always()
+        run: |
+          mkdir -p /opt/yarn-cache
+          cp -r ~/.cache/yarn/* /opt/yarn-cache/ || true
+
+      - name: Save local node_modules cache
+        if: always()
+        run: |
+          mkdir -p /opt/node-modules-cache
+          cp -r ./node_modules /opt/node-modules-cache || true
 
       - name: Build app
         run: yarn build
