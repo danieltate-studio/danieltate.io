@@ -75,6 +75,9 @@ jobs:
           cache-to: type=local,dest=/opt/docker-cache,mode=max
           provenance: false
 
+      - name: Copy local .env
+        run: cp ~/Projects/danieltate.io/.env .env
+        
       - name: Deploy container
         run: make deploy
 
