@@ -1,10 +1,10 @@
 pipeline {
   agent {
-      kubernetes {
-        label 'jenkins-agent'
-        defaultContainer 'jnlp'
-      }
+    kubernetes {
+      label 'jenkins-agent'
+      defaultContainer 'docker'
     }
+  }
 
   stages {
     stage('Checkout') {
