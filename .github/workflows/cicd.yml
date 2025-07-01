@@ -88,3 +88,4 @@ jobs:
           echo "📦 Image built locally: personal-website:local"
           echo "🚀 Container redeployed via make deploy"
           echo "======================================"
+          rm -f .env
