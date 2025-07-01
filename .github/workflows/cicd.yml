@@ -70,15 +70,13 @@ jobs:
           file: ./Dockerfile
           push: false
           load: true
-          tags: personal-website:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/personal-website:latest
           cache-from: type=local,src=/opt/docker-cache
           cache-to: type=local,dest=/opt/docker-cache,mode=max
           provenance: false
 
-      - name: Tag and push image to Docker Hub
-        run: |
-          docker tag personal-website:latest ${{ secrets.DOCKER_USERNAME }}/personal-website:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/personal-website:latest
+      - name: Push image to Docker Hub using same tag
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/personal-website:latest
           
       - name: Print image ID
         run: |
