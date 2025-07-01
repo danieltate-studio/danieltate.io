@@ -3,6 +3,7 @@ version: '3.8'
 services:
   personal-website:
     image: danieltate888/personal-website:latest
+    container_name: personal-website
     ports:
       - "55001:55001"
     restart: always
