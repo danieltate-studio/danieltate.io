@@ -63,21 +63,25 @@ jobs:
           install: true
           driver-opts: image=moby/buildkit:buildx-stable-1
 
-      - name: Build and push Docker image (with local cache)
+      - name: Build Docker image (local only)
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/personal-website:latest
+          push: false
+          load: true
+          tags: personal-website:local
           cache-from: type=local,src=/opt/docker-cache
           cache-to: type=local,dest=/opt/docker-cache,mode=max
           provenance: false
+
+      - name: Deploy container
+        run: make deploy
 
       - name: Done
         run: |
           echo "======================================"
           echo "✅ CI/CD pipeline completed successfully!"
-          echo "📦 Image pushed: ${{ secrets.DOCKER_USERNAME }}/personal-website:latest"
-          echo "🕵️‍♂️ Watchtower should have already triggered container reload"
-          echo "======================================"    
+          echo "📦 Image built locally: personal-website:local"
+          echo "🚀 Container redeployed via make deploy"
+          echo "======================================"

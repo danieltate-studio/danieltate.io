@@ -1,9 +1,9 @@
 services:
   personal-website:
-    image: ${DOCKERHUB_USERNAME}/personal-website:latest
+    image: personal-website:local
     container_name: personal-website
     ports:
       - "55001:55001"
     restart: always
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
+#    labels:
+#      - "com.centurylinklabs.watchtower.enable=true"
