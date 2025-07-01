@@ -5,3 +5,5 @@ services:
     ports:
       - "55001:55001"
     restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
