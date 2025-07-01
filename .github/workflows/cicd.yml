@@ -63,12 +63,13 @@ jobs:
           install: true
           driver-opts: image=moby/buildkit:buildx-stable-1
 
-      - name: Build and push Docker image (with local cache)
+      - name: Build and push Docker image (with registry cache)
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/personal-website:latest
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/personal-website:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/personal-website:buildcache,mode=max
+          provenance: false

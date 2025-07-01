@@ -9,3 +9,11 @@ README.md
 *.env*
 coverage
 tests
+/opt/
+.next
+.cache
+dist
+*.local
+*.swp
+*.zip
+.DS_Store
